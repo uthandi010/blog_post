@@ -1,0 +1,9 @@
+<%# <% binding.pry %> 
+ <%= form_with model: [@comment.blog_post, @comment], local: true, class: "comment-form" do |f| %>
+  <div class="form-group">
+    <%= f.label :content, "Your Comment" %>
+    <%= f.text_area :content, class: "form-control", rows: 3, required: true %>
+  </div>
+   <%= f.submit "Save Comment", class: "btn btn-primary" %>
+<% end %>
+

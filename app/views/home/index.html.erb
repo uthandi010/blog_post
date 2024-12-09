@@ -1,0 +1,70 @@
+<h1>Welcome to my web application </h1>
+<% if signed_in? %>
+  <% if current_user.super_user? %>
+  <h3>USERS LIST</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>User-Name</th>
+          <th>User-Email</th>
+          <th>Roles</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.first_name %> <%= user.last_name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.roles.first.name %></td>
+            <td><%= button_to 'Remove user', user_delete_path(user.id), method: :delete, class: 'btn btn-danger' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <% end %>
+<% end %>
+<% if signed_in? %>
+  <h1>Welcome, <%= current_user.first_name %> <%= current_user.last_name %></h1>
+  <%= link_to 'My Profile',    profile_user_path(current_user) %> |
+  <%= button_to 'Sign Out', sign_out_path, method: :delete, class: 'btn btn-danger' %><br/>
+
+  <p>
+    <%= link_to 'View All Blog Posts', blog_posts_path, class: 'btn btn-secondary' %>
+  </p>
+  
+<% else %>
+  <%= link_to 'Sign In', sign_in_path %> |
+  <%= link_to 'Sign Up', sign_up_path %>
+<% end %>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+  }
+
+  th,td {
+    border: 1px solid #ddd;
+    padding: 9px;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+</style>

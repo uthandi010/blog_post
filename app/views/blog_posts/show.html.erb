@@ -1,0 +1,109 @@
+<h1>Blog Post</h1>
+
+<p><strong>Description:</strong> <%= @blog_post.description %></p>
+
+<p><strong>Author:</strong> <%= @blog_post.user.first_name %> <%= @blog_post.user.last_name %></p>
+<div class="blog-actions">
+  <% if current_user.super_user? || current_user.id == @blog_post.user_id %>
+    <%= link_to 'Edit Blog Post', edit_blog_post_path(@blog_post), class: 'btn btn-primary' %><br/><br>
+    <%= button_to 'Delete Blog Post', blog_post_path(@blog_post), method: :delete,  class: 'btn btn-danger' %><br/>
+  <% end %>
+  <%= link_to 'Back to Blog Posts', blog_posts_path, class: 'btn btn-secondary' %>
+</div>
+
+<% if @blog_post.picture.attached? %>
+  <p><strong>Picture:</strong></p>
+  <%= image_tag @blog_post.picture, class: "blog-post-image" %>
+<% end %><br>
+<hr>
+
+<h3>Add a Comment</h3>
+<%= form_with model: [@blog_post, Comment.new], local: true, class: "comment-form" do |form| %>
+  <div class="form-group">
+    <%= form.label :content, "Your Comment" %>
+    <%= form.text_area :content, class: "form-control", rows: 1, required: true %>
+  </div>
+  <%= form.submit "Post Comment", class: "btn btn-primary" %>
+<% end %>
+
+<hr>
+
+<h2>Comments</h2>
+<div id="comments">
+  <% @blog_post.comments.where(parent_id: nil).includes(:replies).each do |comment| %>
+    <div class="comment">
+      <p><strong><%= comment.user.first_name %>:</strong> <%= comment.content %></p>
+      
+      <!-- Edit and Delete Options for Comments -->
+      <% if current_user.super_user? || comment.user == current_user %>
+        <%= link_to 'Edit', edit_blog_post_comment_path(@blog_post, comment), class: "btn btn-secondary btn-sm" %>
+        <%= button_to 'Delete', blog_post_comment_path(@blog_post, comment), method: :delete, class: "btn btn-danger btn-sm" %>
+      <% end %>
+
+      <!-- Replies -->
+      <div class="replies">
+        <% comment.replies.each do |reply| %>
+          <div class="reply">
+            <p><strong><%= reply.user.first_name %>:</strong> <%= reply.content %></p>
+
+            
+            <% if current_user.super_user? || reply.user == current_user %>
+              <%= link_to 'Edit', edit_blog_post_comment_path(@blog_post, reply), class: "btn btn-secondary btn-sm" %>
+              <%= button_to 'Delete', blog_post_comment_path(@blog_post, reply), method: :delete, class: "btn btn-danger btn-sm" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      
+      <%= form_with(model: [@blog_post, Comment.new], local: true, class: "reply-form" ) do |f| %>
+        <%= f.hidden_field :parent_id, value: comment.id %>
+        <div class="form-group">
+          <%= f.text_area :content, placeholder: 'Write a reply...', class: "form-control", rows: 1, required: true %>
+        </div>
+        <%= f.submit 'Reply', class: "btn btn-info btn-sm" %>
+      <% end %>
+    </div>
+    <hr>
+  <% end %>
+</div>
+
+<style>
+  .comment {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.reply {
+  margin-left: 20px;
+  padding: 5px;
+  border-left: 2px solid #ccc;
+  margin-top: 10px;
+}
+
+.comment-form, .reply-form {
+  margin-top: 10px;
+}
+
+.btn-sm {
+  margin-right: 5px;
+}
+
+.replies {
+  margin-top: 10px;
+}
+
+.blog-post-image {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+
+.blog-actions {
+  margin-top: 20px;
+}
+
+</style>

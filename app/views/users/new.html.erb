@@ -1,0 +1,28 @@
+<h1>Sign Up</h1>
+
+<%= form_with model: @user, url: sign_up_path, method: :post do |form| %>
+  <div>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div><br/>
+  
+  <div>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div><br/>
+
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div><br/>
+
+  <div>
+    <%= form.label :password %>
+    <%= form.password_field :password %>
+  </div><br/>
+
+  <div>
+    <%= form.submit "Sign Up" %>
+  </div><br/>
+  <%= link_to 'Home', root_path %> 
+<% end %>

@@ -1,0 +1,41 @@
+<h1>Edit Blog Post</h1>
+
+<% if @blog_post.errors[:picture].any? %>
+  <h3><div class="text-danger">
+    <%= @blog_post.errors[:picture].join(', ') %>
+  </div></h3>
+<% end %>
+<%= link_to 'Back to Blog Posts', blog_posts_path, class: 'btn btn-secondary' %><br/><br>
+
+<%= form_with model: @blog_post, local: true do |form| %>
+  <div class="form-group">
+    <%= form.label :description, 'Description' %>
+    <%= form.text_area :description, class: 'form-control' %>
+  </div>
+  <div>
+    <% if @blog_post.picture.attached? %>
+        <p>Image:</p>
+        <%= image_tag @blog_post.picture %>
+    <% end %>
+  </div>
+  <div class="form-group">
+     <%= form.label :image, "Upload Image (JPEG, 2MB-8MB)" %>
+    <%= form.file_field :picture, class: 'form-control' %>
+  </div><br>
+
+  <div class="form-group">
+    <%= form.submit 'Update Blog Post', class: 'btn btn-primary' %>
+  </div>
+<% end %><br/>
+
+<%= button_to 'Delete', blog_post_path(@blog_post), method: :delete, class: 'btn btn-danger' %>
+    
+
+<style>
+  h3 {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+</style>

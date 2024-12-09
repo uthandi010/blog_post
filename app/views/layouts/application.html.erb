@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "My App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :application, "data-turbo-track": "reload" %>
+
+    <style>
+      body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      .app-container {
+        text-align: center;
+        max-width: 1000px;
+        width: 100%;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .flash-messages {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+
+      .flash-messages .alert {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+      }
+
+      .flash-messages .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .flash-messages .close-alert {
+        background: none;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #721c24;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="flash-messages">
+      <% flash.each do |key, message| %>
+        <div class="alert <%= "alert-#{key}" %>">
+          <span><%= message %></span>
+          <button class="close-alert" onclick="this.parentElement.style.display='none';">&times;</button>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="app-container">
+      <%= yield %>
+    </div>
+  </body>
+</html>

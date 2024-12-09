@@ -1,0 +1,27 @@
+<h1>My Profile</h1>
+
+<div class="profile-info">
+  <p><strong>Author:</strong> <%= @user.first_name %> <%= @user.last_name %></p>
+  <p><strong>Email:</strong> <%= @user.email %></p>
+</div><br/>
+<%= link_to 'Back to Home', root_path, class: 'btn btn-secondary' %> || 
+<%= link_to 'Create a New Post', new_blog_post_path, class: 'btn btn-primary' %>
+<h2>My Blog Posts</h2>
+
+<% if @user_posts.any? %>
+  <ul>
+    <% @user_posts.each do |post| %>
+      <li>
+        <strong><%= link_to post.description.truncate(50), blog_post_path(post) %></strong><br>
+        <% if post.picture.attached? %>
+          <%= image_tag post.picture %>
+        <% end %>
+        <%= link_to 'Edit', edit_blog_post_path(post), class: 'btn btn-primary' %><br/>
+        <%= button_to 'Delete', blog_post_path(post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      </li>
+      <br/>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no blog posts yet.</p>
+<% end %>

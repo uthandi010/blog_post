@@ -1,0 +1,26 @@
+<% if signed_in? %>
+    <h1>Blog Posts</h1><br/>
+
+    <%= link_to 'My Profile', profile_user_path(current_user) %> <br/><br>
+    <%= button_to 'Sign Out', sign_out_path, method: :delete, class: 'btn btn-danger' %> <br/>
+    <%= link_to 'Go to Home', root_path, class: 'btn btn-primary' %> || 
+    <%= link_to 'New Blog Post', new_blog_post_path, class: 'btn btn-primary' %>
+
+    <h1>All Blog Posts</h1><br/>
+    <ul>
+    <% @blog_posts.each do |blog_post| %>
+        <li>
+        <h2><%= link_to blog_post.description.truncate(50), blog_post_path(blog_post) %></h2>
+        <p> Author: <%= blog_post.user.first_name %> <%= blog_post.user.last_name %></p>
+        <% if blog_post.picture.attached? %>
+            <p><strong>Picture:</strong></p>
+            <%= image_tag blog_post.picture %>
+        <% end %>
+
+        <% if current_user.super_user? || current_user.id == blog_post.user_id %>
+            <%= link_to 'Edit', edit_blog_post_path(blog_post), class: 'btn btn-primary' %>
+        <%end%>
+        </li>
+    <% end %>
+    </ul>
+<% end %>

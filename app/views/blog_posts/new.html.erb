@@ -1,0 +1,32 @@
+<h1>New Blog Post</h1>
+
+
+<% if @blog_post.errors[:picture].any? %>
+  <h3><div class="text-danger">
+    <%= @blog_post.errors[:picture].join(', ') %>
+  </div></h3>
+<% end %>
+
+<%= form_with model: @blog_post, local: true do |form| %>
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description, required: true %>
+  </div>
+  
+  <div>
+  <%= form.label :image, "Upload Image (JPEG, 2MB-8MB)" %>
+  <%= form.file_field :picture, accept: 'image/jpeg', class: 'form-control' %>
+  </div>
+  <div>
+    <%= form.submit 'Create Blog Post' %>
+  </div>
+  <%= link_to 'Back to Blog Posts', blog_posts_path, class: 'btn btn-secondary' %>
+<% end %>
+<style>
+  h3 {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+</style>
