@@ -2,10 +2,8 @@
 
 one:
   description: MyText
-  picture: MyString
   user: one
 
 two:
   description: MyText
-  picture: MyString
   user: two
